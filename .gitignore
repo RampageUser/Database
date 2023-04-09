@@ -1,0 +1,8 @@
+/venv
+cities.db
+Chocolate2.db
+data.db
+student_info.db
+testdb.db
+.DS_Store
+.idea/
