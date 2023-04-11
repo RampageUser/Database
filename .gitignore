@@ -6,3 +6,5 @@ student_info.db
 testdb.db
 .DS_Store
 .idea/
+TEST.py
+__pycache__/
