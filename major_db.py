@@ -1,12 +1,12 @@
-from sql import add_data
+from sql import add_data, show_all_info
 
 
 def major_db():
     submenu_major()
-    from main import choice_option
+    from config import choice_option
     user_option: int = choice_option(max=5)
     if user_option == 1:
-        pass
+        show_all_info(table='Majors')
     elif user_option == 2:
         add_speciality()
     elif user_option == 3:
@@ -14,9 +14,8 @@ def major_db():
     elif user_option == 4:
         pass
     elif user_option == 5:
-        pass
-    else:
-        pass
+        return
+    major_db()
 
 
 def submenu_major() -> None:

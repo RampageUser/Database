@@ -1,12 +1,12 @@
-from sql import add_data
+from sql import add_data, show_all_info
 
 
 def student_db():
     submenu_student()
-    from main import choice_option
-    user_option: int = choice_option(max=5)
+    from config import choice_option
+    user_option: int = choice_option(max=6)
     if user_option == 1:
-        pass
+        show_all_info(table='Students')
     elif user_option == 2:
         add_student()
     elif user_option == 3:
@@ -16,14 +16,14 @@ def student_db():
     elif user_option == 5:
         pass
     elif user_option == 6:
-        pass
-    else:
-        pass
+        return
+    student_db()
+
 
 def submenu_student() -> None:
     print('-' * 35)
     print('Students database')
-    print('1. Show all')
+    print('1. Show all students')
     print('2. Add new student')
     print('3. Remove student')
     print('4. Change info about student')

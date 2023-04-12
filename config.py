@@ -6,19 +6,22 @@ from department_db import department_db
 
 def main():
     is_work: bool = True
-    create_db()
+    if is_work:
+        create_db()
 
-    while is_work:
-        main_menu()
-        user_option: int = choice_option(max=4)
-        if user_option == 1:
-            student_db()
-        elif user_option == 2:
-            major_db()
-        elif user_option == 3:
-            department_db()
-        else:
-            is_work = False
+        while True:
+            main_menu()
+            user_option: int = choice_option(max=4)
+            if user_option == 1:
+                student_db()
+            elif user_option == 2:
+                major_db()
+            elif user_option == 3:
+                department_db()
+            else:
+                print('Shutdown')
+                is_work = False
+                break
 
 
 def choice_option(max: int, min=1) -> int:

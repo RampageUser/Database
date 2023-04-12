@@ -24,6 +24,29 @@ def show_info(table):
         result = cursor.fetchall()
 
 
+def show_all_info(table):
+    with sqlite3.connect('student_info.db') as conn:
+        cursor = conn.cursor()
+        if table == 'Students':
+            cursor.execute('''select Students.Name, Majors.Name, Department.Name 
+                                          from Students, Majors, Department
+                                          where Students.MajorID = Majors.MajorID
+                                          and Students.DepartmentID = Department.DepartmentID''')
+            print()
+            for counter, i in enumerate(cursor.fetchall(), start=1):
+                print(f'{counter:>3}. {i[0]:15}{i[1]:15}{i[2]:15}')
+                print()
+        else:
+            if table == 'Department':
+                cursor.execute('''select Name from Department''')
+            elif table == 'Majors':
+                cursor.execute('''select Name from Majors''')
+            print()
+            for counter, i in enumerate(cursor.fetchall(), start=1):
+                print(f'{counter:>3}. {i[0]}')
+                print()
+
+
 def add_data(table, name, major_id=None, department_id=None):
     try:
         with sqlite3.connect('student_info.db') as conn:
