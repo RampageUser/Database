@@ -1,4 +1,4 @@
-from sql import add_data, show_all_info
+from sql import add_data, show_all_info, find_info, delete_info
 
 
 def department_db():
@@ -10,7 +10,7 @@ def department_db():
     elif user_option == 2:
         add_department()
     elif user_option == 3:
-        pass
+        delete_department()
     elif user_option == 4:
         pass
     elif user_option == 5:
@@ -19,6 +19,7 @@ def department_db():
 
 
 def submenu_department() -> None:
+    print()
     print('-' * 35)
     print('Department database')
     print('1. Show all')
@@ -33,3 +34,14 @@ def submenu_department() -> None:
 def add_department():
     department: str = input('Inter new department: ')
     add_data(table='Department', name=department)
+
+
+def delete_department():
+    department: str = input('Inter a department what you want to remove: ')
+    result = find_info(table='Department', name=department)
+    if result:
+        id: int = int(input('Inter ID: '))
+        if id in result:
+            delete_info(table='Majors', id=id)
+        else:
+            print('Incorrect ID, please try later')

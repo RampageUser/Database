@@ -37,6 +37,7 @@ def choice_option(max: int, min=1) -> int:
         main()
 
 def main_menu() -> None:
+    print()
     print('-' * 35)
     print('Main menu')
     print('1. Work with students database')

@@ -1,5 +1,4 @@
-from sql import add_data, show_all_info
-
+from sql import add_data, show_all_info, find_info, delete_info
 
 def major_db():
     submenu_major()
@@ -10,7 +9,7 @@ def major_db():
     elif user_option == 2:
         add_speciality()
     elif user_option == 3:
-        pass
+        delete_speciality()
     elif user_option == 4:
         pass
     elif user_option == 5:
@@ -19,6 +18,7 @@ def major_db():
 
 
 def submenu_major() -> None:
+    print()
     print('-' * 35)
     print('Major database')
     print('1. Show all speciality')
@@ -33,3 +33,14 @@ def submenu_major() -> None:
 def add_speciality():
     speciality: str = input('Inter new speciality: ')
     add_data(table='Majors', name=speciality)
+
+
+def delete_speciality():
+    speciality: str = input('Inter a speciality what you want to remove: ')
+    result = find_info(table='Majors', name=speciality)
+    if result:
+        id: int = int(input('Inter ID: '))
+        if id in result:
+            delete_info(table='Majors', id=id)
+        else:
+            print('Incorrect ID, please try later')

@@ -17,14 +17,14 @@ def create_db() -> None:
         conn.commit()
 
 
-def show_info(table):
+def show_info(table) -> None:
     with sqlite3.connect('student_info.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''select * from ?''', (table,))
         result = cursor.fetchall()
 
 
-def show_all_info(table):
+def show_all_info(table: str) -> None:
     with sqlite3.connect('student_info.db') as conn:
         cursor = conn.cursor()
         if table == 'Students':
@@ -47,7 +47,7 @@ def show_all_info(table):
                 print()
 
 
-def add_data(table, name, major_id=None, department_id=None):
+def add_data(table: str, name: str, major_id=None, department_id=None) -> None:
     try:
         with sqlite3.connect('student_info.db') as conn:
             cursor = conn.cursor()
@@ -66,3 +66,38 @@ def add_data(table, name, major_id=None, department_id=None):
         print('~' * 48)
     else:
         print('Info has been added')
+
+
+def find_info(table: str, name: str):
+    with sqlite3.connect('student_info.db') as conn:
+        cursor = conn.cursor()
+        if table == 'Students':
+            cursor.execute('''select StudentId, Name from Students where Name = ?''', (name,))
+        elif table == 'Majors':
+            cursor.execute('''select MajorID, Name from Majors where Name = ?''', (name,))
+        else:
+            cursor.execute('''select DepartmentID, Name from Department where Name = ?''', (name,))
+        result = cursor.fetchall()
+        if result:
+            print(f'Was found:')
+            id = []
+            for i in result:
+                print(f'{i[0]:>3}: {i[1]}')
+                id.append(i[0])
+            return id
+        else:
+            return False
+
+
+def delete_info(table: str, id: int) -> None:
+    with sqlite3.connect('student_info.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('pragma foreign_keys = on')
+        if table == 'Students':
+            cursor.execute('''delete from Students where StudentID = ?''', (id,))
+        elif table == 'Majors':
+            cursor.execute('''delete from Majors where MajorID = ?''', (id,))
+        else:
+            cursor.execute('''delete from Department where DepartmentID = ?''', (id,))
+        count = cursor.rowcount
+        print(f'was removed {count} row from {table}')
