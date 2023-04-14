@@ -24,6 +24,7 @@ def submenu_student() -> None:
     print()
     print('-' * 35)
     print('Students database')
+    print()
     print('1. Show all students')
     print('2. Add new student')
     print('3. Remove student')

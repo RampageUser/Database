@@ -1,4 +1,4 @@
-from sql import add_data, show_all_info, find_info, delete_info
+from sql import add_data, show_all_info, find_info, delete_info, change_info
 
 
 def department_db():
@@ -12,7 +12,7 @@ def department_db():
     elif user_option == 3:
         delete_department()
     elif user_option == 4:
-        pass
+        change_department()
     elif user_option == 5:
         return
     department_db()
@@ -22,6 +22,7 @@ def submenu_department() -> None:
     print()
     print('-' * 35)
     print('Department database')
+    print()
     print('1. Show all')
     print('2. Add new department')
     print('3. Delete department')
@@ -45,3 +46,23 @@ def delete_department():
             delete_info(table='Majors', id=id)
         else:
             print('Incorrect ID, please try later')
+
+
+def change_department():
+    department: str = input('Inter department what do you want to change: ')
+    result = find_info(table='Department', name=department)
+    if result:
+        new_department: str = input('Inter a new name for speciality: ')
+        if len(result) == 1:
+            change_info(table='Department', id=result[0], name=new_department)
+        else:
+            try:
+                id: int = int(input('Inter a correct ID of department: '))
+                if id in result:
+                    change_info(table='Department', id=id, name=new_department)
+                else:
+                    print('Incorrect ID, please try again later.')
+            except ValueError:
+                print('Incorrect value.')
+    else:
+        print("Department didn't found")

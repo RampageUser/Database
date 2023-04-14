@@ -34,7 +34,7 @@ def show_all_info(table: str) -> None:
                                           and Students.DepartmentID = Department.DepartmentID''')
             print()
             for counter, i in enumerate(cursor.fetchall(), start=1):
-                print(f'{counter:>3}. {i[0]:15}{i[1]:15}{i[2]:15}')
+                print(f'{counter:>3}.\n{"Name:":20}{i[0]}\n{"Major:":20}{i[1]}\n{"Department:":20}{i[2]}')
                 print()
         else:
             if table == 'Department':
@@ -68,7 +68,7 @@ def add_data(table: str, name: str, major_id=None, department_id=None) -> None:
         print('Info has been added')
 
 
-def find_info(table: str, name: str):
+def find_info(table: str, name: str) -> False or list:
     with sqlite3.connect('student_info.db') as conn:
         cursor = conn.cursor()
         if table == 'Students':
@@ -79,7 +79,7 @@ def find_info(table: str, name: str):
             cursor.execute('''select DepartmentID, Name from Department where Name = ?''', (name,))
         result = cursor.fetchall()
         if result:
-            print(f'Was found:')
+            print('Was found:')
             id = []
             for i in result:
                 print(f'{i[0]:>3}: {i[1]}')
@@ -90,14 +90,32 @@ def find_info(table: str, name: str):
 
 
 def delete_info(table: str, id: int) -> None:
+    try:
+        with sqlite3.connect('student_info.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute('pragma foreign_keys = on')
+            if table == 'Students':
+                cursor.execute('''delete from Students where StudentID = ?''', (id,))
+            elif table == 'Majors':
+                cursor.execute('''delete from Majors where MajorID = ?''', (id,))
+            else:
+                cursor.execute('''delete from Department where DepartmentID = ?''', (id,))
+            count = cursor.rowcount
+            print(f'was removed {count} row from {table}')
+    except sqlite3.IntegrityError:
+        print('~' * 54)
+        print("You haven't to delete it, because there is a reference")
+        print('~' * 54)
+
+
+def change_info(table: str, id: int, name: str):
     with sqlite3.connect('student_info.db') as conn:
         cursor = conn.cursor()
-        cursor.execute('pragma foreign_keys = on')
         if table == 'Students':
-            cursor.execute('''delete from Students where StudentID = ?''', (id,))
+            cursor.execute('''update Students set Name = ? where StudentID = ?''')
         elif table == 'Majors':
-            cursor.execute('''delete from Majors where MajorID = ?''', (id,))
+            cursor.execute('''update Majors set Name = ? where MajorID = ?''', (name, id))
         else:
-            cursor.execute('''delete from Department where DepartmentID = ?''', (id,))
-        count = cursor.rowcount
-        print(f'was removed {count} row from {table}')
+            cursor.execute('''update Department set Name = ? where DepartmentID = ?''', (name, id))
+        conn.commit()
+        print('Info was changed.')

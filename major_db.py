@@ -1,4 +1,4 @@
-from sql import add_data, show_all_info, find_info, delete_info
+from sql import add_data, show_all_info, find_info, delete_info, change_info
 
 def major_db():
     submenu_major()
@@ -11,7 +11,7 @@ def major_db():
     elif user_option == 3:
         delete_speciality()
     elif user_option == 4:
-        pass
+        change_speciality()
     elif user_option == 5:
         return
     major_db()
@@ -21,6 +21,7 @@ def submenu_major() -> None:
     print()
     print('-' * 35)
     print('Major database')
+    print()
     print('1. Show all speciality')
     print('2. Add new speciality')
     print('3. Delete speciality')
@@ -44,3 +45,23 @@ def delete_speciality():
             delete_info(table='Majors', id=id)
         else:
             print('Incorrect ID, please try later')
+
+
+def change_speciality():
+    speciality: str = input('Inter speciality what do you want to change: ')
+    result = find_info(table='Majors', name=speciality)
+    if result:
+        new_speciality: str = input('Inter a new name for speciality: ')
+        if len(result) == 1:
+            change_info(table='Majors', id=result[0], name=new_speciality)
+        else:
+            try:
+                id: int = int(input('Inter a correct ID of speciality: '))
+                if id in result:
+                    change_info(table='Majors', id=id, name=new_speciality)
+                else:
+                    print('Incorrect ID, please try again later.')
+            except ValueError:
+                print('Incorrect value.')
+    else:
+        print("Speciality didn't found")

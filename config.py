@@ -5,8 +5,6 @@ from department_db import department_db
 
 
 def main():
-    is_work: bool = True
-    if is_work:
         create_db()
 
         while True:
@@ -20,7 +18,6 @@ def main():
                 department_db()
             else:
                 print('Shutdown')
-                is_work = False
                 break
 
 
@@ -40,6 +37,7 @@ def main_menu() -> None:
     print()
     print('-' * 35)
     print('Main menu')
+    print()
     print('1. Work with students database')
     print('2. Work with majors database')
     print('3. Work with department database')
