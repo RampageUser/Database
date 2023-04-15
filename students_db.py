@@ -1,4 +1,4 @@
-from sql import add_data, show_all_info, find_info, delete_info
+from sql import add_data, show_all_info, find_info, delete_info, change_info
 
 
 def student_db():
@@ -12,7 +12,7 @@ def student_db():
     elif user_option == 3:
         delete_student()
     elif user_option == 4:
-        pass
+        change_student()
     elif user_option == 5:
         find_student()
     elif user_option == 6:
@@ -50,9 +50,41 @@ def delete_student():
         if id in result:
             delete_info(table='Students', id=id)
         else:
-            print('Incorrect ID, please try later')
+            print('Incorrect ID, please try again later')
 
 
 def find_student():
     student: str = input('Inter a student name: ')
     find_info(table='Students', name=student)
+
+
+def change_student():
+    student: str = input('Inter a student name: ')
+    result = find_info(table='Students', name=student)
+    if result:
+        if len(result) == 1:
+            change_student_info(id=result[0])
+        else:
+            correct_id: int = int(input('Inter correct ID of student what you want to change: '))
+            if correct_id in result:
+                change_student_info(id=correct_id)
+            else:
+                print('Incorrect ID, please try again later')
+    else:
+        print("Student didn't found.")
+
+
+def change_student_info(id: int):
+    try:
+        name: str = input('Inter new student name: ')
+        id_major = show_all_info(table='Majors')
+        new_id_major: int = int(input('Inter ID of speciality for student: '))
+        id_department = show_all_info(table='Department')
+        new_id_department: int = int(input('Inter ID of department for student: '))
+        if (new_id_major in id_major) and (new_id_department in id_department):
+            change_info(table='Students', id=id, name=name,
+                        speciality=new_id_major, department=new_id_department)
+        else:
+            print('Incorrect ID, please try again later.')
+    except ValueError:
+        print('Incorrect value, please try again later.')

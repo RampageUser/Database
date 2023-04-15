@@ -63,6 +63,6 @@ def change_department():
                 else:
                     print('Incorrect ID, please try again later.')
             except ValueError:
-                print('Incorrect value.')
+                print('Incorrect value, please try again later.')
     else:
         print("Department didn't found")

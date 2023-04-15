@@ -17,14 +17,7 @@ def create_db() -> None:
         conn.commit()
 
 
-def show_info(table) -> None:
-    with sqlite3.connect('student_info.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute('''select * from ?''', (table,))
-        result = cursor.fetchall()
-
-
-def show_all_info(table: str) -> None:
+def show_all_info(table: str) -> None or list:
     with sqlite3.connect('student_info.db') as conn:
         cursor = conn.cursor()
         if table == 'Students':
@@ -37,14 +30,19 @@ def show_all_info(table: str) -> None:
                 print(f'{counter:>3}.\n{"Name:":20}{i[0]}\n{"Major:":20}{i[1]}\n{"Department:":20}{i[2]}')
                 print()
         else:
+            id = []
             if table == 'Department':
-                cursor.execute('''select Name from Department''')
+                cursor.execute('''select DepartmentID, Name from Department''')
             elif table == 'Majors':
-                cursor.execute('''select Name from Majors''')
+                cursor.execute('''select MajorID, Name from Majors''')
             print()
-            for counter, i in enumerate(cursor.fetchall(), start=1):
-                print(f'{counter:>3}. {i[0]}')
-                print()
+            print(f'{"ID":15}Name')
+            print('-' * 25)
+            for i in cursor.fetchall():
+                id.append(i[0])
+                print(f'{i[0]:<15}{i[1]}')
+            print()
+            return id
 
 
 def add_data(table: str, name: str, major_id=None, department_id=None) -> None:
@@ -108,11 +106,12 @@ def delete_info(table: str, id: int) -> None:
         print('~' * 54)
 
 
-def change_info(table: str, id: int, name: str):
+def change_info(table: str, id: int, name: str, speciality = None, department = None):
     with sqlite3.connect('student_info.db') as conn:
         cursor = conn.cursor()
         if table == 'Students':
-            cursor.execute('''update Students set Name = ? where StudentID = ?''')
+            cursor.execute('''update Students set Name = ?, MajorID = ?, DepartmentID = ?
+                              where StudentID = ?''', (name, speciality, department, id))
         elif table == 'Majors':
             cursor.execute('''update Majors set Name = ? where MajorID = ?''', (name, id))
         else:

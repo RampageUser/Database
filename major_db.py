@@ -62,6 +62,6 @@ def change_speciality():
                 else:
                     print('Incorrect ID, please try again later.')
             except ValueError:
-                print('Incorrect value.')
+                print('Incorrect value, please try again later.')
     else:
         print("Speciality didn't found")
