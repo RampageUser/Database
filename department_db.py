@@ -1,4 +1,5 @@
 from sql import add_data, show_all_info, find_info, delete_info, change_info
+from lexicon import lexicon_inter, lexicon_error
 
 
 def department_db():
@@ -33,36 +34,38 @@ def submenu_department() -> None:
 
 
 def add_department():
-    department: str = input('Inter new department: ')
+    department: str = input(lexicon_inter['New name'])
     add_data(table='Department', name=department)
 
 
 def delete_department():
-    department: str = input('Inter a department what you want to remove: ')
+    department: str = input(lexicon_inter['Remove'])
     result = find_info(table='Department', name=department)
     if result:
         id: int = int(input('Inter ID: '))
         if id in result:
             delete_info(table='Majors', id=id)
         else:
-            print('Incorrect ID, please try later')
+            print(lexicon_error['ID'])
 
 
 def change_department():
-    department: str = input('Inter department what do you want to change: ')
+    department: str = input(lexicon_inter['Change'])
     result = find_info(table='Department', name=department)
     if result:
-        new_department: str = input('Inter a new name for speciality: ')
+        new_department: str = input(lexicon_inter['New name'])
         if len(result) == 1:
             change_info(table='Department', id=result[0], name=new_department)
         else:
             try:
-                id: int = int(input('Inter a correct ID of department: '))
+                id: int = int(input(lexicon_inter['ID']))
                 if id in result:
                     change_info(table='Department', id=id, name=new_department)
                 else:
-                    print('Incorrect ID, please try again later.')
+                    print(lexicon_error['ID'])
             except ValueError:
-                print('Incorrect value, please try again later.')
+                print('~' * 40)
+                print(lexicon_error['Value err'])
+                print('~' * 40)
     else:
-        print("Department didn't found")
+        print(lexicon_error['Not find'])

@@ -1,4 +1,5 @@
 from sql import add_data, show_all_info, find_info, delete_info, change_info
+from lexicon import lexicon_error, lexicon_inter
 
 def major_db():
     submenu_major()
@@ -32,36 +33,38 @@ def submenu_major() -> None:
 
 
 def add_speciality():
-    speciality: str = input('Inter new speciality: ')
+    speciality: str = input(lexicon_inter['New name'])
     add_data(table='Majors', name=speciality)
 
 
 def delete_speciality():
-    speciality: str = input('Inter a speciality what you want to remove: ')
+    speciality: str = input(lexicon_inter['Remove'])
     result = find_info(table='Majors', name=speciality)
     if result:
-        id: int = int(input('Inter ID: '))
+        id: int = int(input(lexicon_inter['ID']))
         if id in result:
             delete_info(table='Majors', id=id)
         else:
-            print('Incorrect ID, please try later')
+            print(lexicon_error['ID'])
 
 
 def change_speciality():
-    speciality: str = input('Inter speciality what do you want to change: ')
+    speciality: str = input(lexicon_inter['Change'])
     result = find_info(table='Majors', name=speciality)
     if result:
-        new_speciality: str = input('Inter a new name for speciality: ')
+        new_speciality: str = input(lexicon_inter['New name'])
         if len(result) == 1:
             change_info(table='Majors', id=result[0], name=new_speciality)
         else:
             try:
-                id: int = int(input('Inter a correct ID of speciality: '))
+                id: int = int(input(lexicon_inter['ID']))
                 if id in result:
                     change_info(table='Majors', id=id, name=new_speciality)
                 else:
-                    print('Incorrect ID, please try again later.')
+                    print(lexicon_error['ID'])
             except ValueError:
-                print('Incorrect value, please try again later.')
+                print('~' * 40)
+                print(lexicon_error['Value err'])
+                print('~' * 40)
     else:
-        print("Speciality didn't found")
+        print(lexicon_error['Not find'])

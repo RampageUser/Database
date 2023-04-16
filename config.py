@@ -2,6 +2,7 @@ from sql import create_db
 from students_db import student_db
 from major_db import major_db
 from department_db import department_db
+from lexicon import lexicon_error, lexicon_inter
 
 
 def main():
@@ -23,13 +24,13 @@ def main():
 
 def choice_option(max: int, min=1) -> int:
     try:
-        user_option = int(input('Inter number of menu: '))
+        user_option = int(input(lexicon_inter['Menu']))
         while user_option < min or user_option > max:
-            user_option = int(input('Inter correct number of menu: '))
+            user_option = int(input(lexicon_inter['Correct menu']))
         return user_option
     except Exception:
         print('~' * 40)
-        print('incorrect value, please try again later.')
+        print(lexicon_error['Value err'])
         print('~' * 40)
         main()
 

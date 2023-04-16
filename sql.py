@@ -1,4 +1,5 @@
 import sqlite3
+from lexicon import lexicon_error, lexicon_success
 
 
 def create_db() -> None:
@@ -15,6 +16,7 @@ def create_db() -> None:
                                                                foreign key (MajorID) references Majors(MajorID),
                                                                foreign key (DepartmentID) references Department(DepartmentID))''')
         conn.commit()
+        print(lexicon_success['Created'])
 
 
 def show_all_info(table: str) -> None or list:
@@ -60,10 +62,10 @@ def add_data(table: str, name: str, major_id=None, department_id=None) -> None:
             conn.commit()
     except sqlite3.IntegrityError:
         print('~'* 48)
-        print('Incorrect value, you should inter en existed ID!')
+        print(lexicon_error['ID'])
         print('~' * 48)
     else:
-        print('Info has been added')
+        print(lexicon_success['Added'])
 
 
 def find_info(table: str, name: str) -> False or list:
@@ -102,7 +104,7 @@ def delete_info(table: str, id: int) -> None:
             print(f'was removed {count} row from {table}')
     except sqlite3.IntegrityError:
         print('~' * 54)
-        print("You haven't to delete it, because there is a reference")
+        print(lexicon_error['Reference'])
         print('~' * 54)
 
 
@@ -117,4 +119,4 @@ def change_info(table: str, id: int, name: str, speciality = None, department = 
         else:
             cursor.execute('''update Department set Name = ? where DepartmentID = ?''', (name, id))
         conn.commit()
-        print('Info was changed.')
+        print(lexicon_success['Changed'])
