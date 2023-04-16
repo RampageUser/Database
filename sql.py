@@ -1,5 +1,5 @@
 import sqlite3
-from lexicon import lexicon_error, lexicon_success
+from lexicon import lexicon_notification, lexicon_success
 
 
 def create_db() -> None:
@@ -27,24 +27,32 @@ def show_all_info(table: str) -> None or list:
                                           from Students, Majors, Department
                                           where Students.MajorID = Majors.MajorID
                                           and Students.DepartmentID = Department.DepartmentID''')
-            print()
-            for counter, i in enumerate(cursor.fetchall(), start=1):
-                print(f'{counter:>3}.\n{"Name:":20}{i[0]}\n{"Major:":20}{i[1]}\n{"Department:":20}{i[2]}')
+            result = cursor.fetchall()
+            if result:
                 print()
+                for counter, i in enumerate(result, start=1):
+                    print(f'{counter:>3}.\n{"Name:":20}{i[0]}\n{"Major:":20}{i[1]}\n{"Department:":20}{i[2]}')
+                    print()
+            else:
+                print(lexicon_notification['Empty'])
         else:
-            id = []
             if table == 'Department':
                 cursor.execute('''select DepartmentID, Name from Department''')
             elif table == 'Majors':
                 cursor.execute('''select MajorID, Name from Majors''')
-            print()
-            print(f'{"ID":15}Name')
-            print('-' * 25)
-            for i in cursor.fetchall():
-                id.append(i[0])
-                print(f'{i[0]:<15}{i[1]}')
-            print()
-            return id
+            result = cursor.fetchall()
+            if result:
+                id = []
+                print()
+                print(f'{"ID":15}Name')
+                print('-' * 25)
+                for i in result:
+                    id.append(i[0])
+                    print(f'{i[0]:<15}{i[1]}')
+                print()
+                return id
+            else:
+                print(lexicon_notification['Empty'])
 
 
 def add_data(table: str, name: str, major_id=None, department_id=None) -> None:
@@ -62,7 +70,7 @@ def add_data(table: str, name: str, major_id=None, department_id=None) -> None:
             conn.commit()
     except sqlite3.IntegrityError:
         print('~'* 48)
-        print(lexicon_error['ID'])
+        print(lexicon_notification['ID'])
         print('~' * 48)
     else:
         print(lexicon_success['Added'])
@@ -79,10 +87,13 @@ def find_info(table: str, name: str) -> False or list:
             cursor.execute('''select DepartmentID, Name from Department where Name = ?''', (name,))
         result = cursor.fetchall()
         if result:
-            print('Was found:')
+            print(lexicon_success['Find'])
             id = []
+            print()
+            print(f'{"ID":15}Name')
+            print('-' * 25)
             for i in result:
-                print(f'{i[0]:>3}: {i[1]}')
+                print(f'{i[0]:<15}{i[1]}')
                 id.append(i[0])
             return id
         else:
@@ -104,11 +115,11 @@ def delete_info(table: str, id: int) -> None:
             print(f'was removed {count} row from {table}')
     except sqlite3.IntegrityError:
         print('~' * 54)
-        print(lexicon_error['Reference'])
+        print(lexicon_notification['Reference'])
         print('~' * 54)
 
 
-def change_info(table: str, id: int, name: str, speciality = None, department = None):
+def change_info(table: str, id: int, name: str, speciality = None, department = None) -> None:
     with sqlite3.connect('student_info.db') as conn:
         cursor = conn.cursor()
         if table == 'Students':

@@ -10,15 +10,18 @@ lexicon_inter: dict = {
     'ID to change': 'Inter a correct ID of name what you want to change: ',
 }
 
-lexicon_error: dict = {
-    'ID': 'Incorrect ID, please try again later',
-    'Not find': "Didn't found, please try again later",
+lexicon_notification: dict = {
+    'ID': 'Incorrect ID, please try again later.',
+    'Not find': "Didn't found, please try again later.",
     'Value err': 'Incorrect value, please try again later.',
-    'Reference': "You haven't to delete it, because there is a reference",
+    'Reference': "You haven't to delete it, because there is a reference.",
+    'Empty': '-- List is empty. --'
 }
 
 lexicon_success: dict = {
     'Created': 'Database was created.',
     'Added': 'Info has been added.',
     'Changed': 'Info was changed.',
+    'Find': 'Was found:',
+    'Shutdown': 'Shutdown.',
 }
